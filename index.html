@@ -1,1 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Monitoring Air Hujan IoT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal" class="login-modal">
+        <div class="login-form">
+            <div class="login-header">
+                <div class="login-icon">🌧️</div>
+                <h2 class="login-title">Selamat Datang</h2>
+                <p class="login-subtitle">Silakan masuk ke Dashboard Monitoring Air Hujan IoT</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="email">
+                        <span class="label-icon">📧</span>
+                        Email
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        class="form-input" 
+                        placeholder="Masukkan alamat email Anda"
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="password">
+                        <span class="label-icon">🔒</span>
+                        Password
+                    </label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="form-input" 
+                        placeholder="Masukkan password Anda"
+                        required
+                        autocomplete="current-password"
+                    >
+                    <div class="password-hint">Minimal 6 karakter</div>
+                </div>
+                
+                <button type="submit" class="login-button" id="loginBtn">
+                    <span id="loginBtnText">Masuk ke Dashboard</span>
+                    <span class="button-icon">→</span>
+                </button>
+            </form>
 
+            <div class="login-footer">
+                <div class="footer-text">
+                    Gunakan email pribadi Anda untuk mengakses dashboard
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Info Bar (shown after login) -->
+    <div id="userInfoBar" class="user-info-bar hidden">
+        <div class="user-avatar" id="userAvatar">A</div>
+        <div class="user-details">
+            <div class="user-name" id="userName">Admin User</div>
+            <div class="user-role" id="userRole">Administrator</div>
+        </div>
+        <button class="logout-button" onclick="logout()">Keluar</button>
+    </div>
+
+    <!-- Main Dashboard Content -->
+    <div id="dashboardContent" class="hidden">
+        <div class="container">
+            <div class="header">
+                <h1>🌧️ Sistem Monitoring Air Hujan IoT</h1>
+                <p>Pengembangan Sistem IoT Terintegrasi Berbasis Cloud untuk Pengumpulan, Pemantauan, dan Pengendalian Pemanfaatan Air Hujan</p>
+            </div>
+
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-icon">💧</div>
+                    <div class="status-value" id="totalWater">1,247</div>
+                    <div class="status-label">Total Air Terkumpul (L)</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-icon">📊</div>
+                    <div class="status-value" id="dailyCollection">89</div>
+                    <div class="status-label">Koleksi Hari Ini (L)</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-icon">🌡️</div>
+                    <div class="status-value" id="temperature">28°C</div>
+                    <div class="status-label">Suhu Rata-rata</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-icon">💨</div>
+                    <div class="status-value" id="humidity">76%</div>
+                    <div class="status-label">Kelembaban</div>
+                </div>
+            </div>
+
+            <div class="main-grid">
+                <div class="chart-container">
+                    <h3 class="chart-title">📈 Grafik Pengumpulan Air (7 Hari Terakhir)</h3>
+                    <div class="chart">
+                        <div class="chart-line"></div>
+                        <div style="position: absolute; bottom: 10px; left: 20px; right: 20px; display: flex; justify-content: space-between; font-size: 0.8rem; color: #b0b0b0;">
+                            <span>Sen</span>
+                            <span>Sel</span>
+                            <span>Rab</span>
+                            <span>Kam</span>
+                            <span>Jum</span>
+                            <span>Sab</span>
+                            <span>Min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <h3 class="chart-title">🎛️ Panel Kontrol</h3>
+                    
+                    <div class="control-group">
+                        <label class="control-label">Pompa Air</label>
+                        <button class="control-button btn-primary" onclick="togglePump()">
+                            <span id="pumpStatus">Aktifkan Pompa</span>
+                        </button>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Sistem Penyaring</label>
+                        <button class="control-button btn-success" onclick="toggleFilter()">
+                            <span id="filterStatus">Mulai Penyaringan</span>
+                        </button>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Mode Otomatis</label>
+                        <button class="control-button btn-warning" onclick="toggleAuto()">
+                            <span id="autoStatus">Aktifkan Auto Mode</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="device-grid">
+                <div class="device-card">
+                    <div class="device-header">
+                        <span class="device-name">🏠 Sensor Tangki Utama</span>
+                        <span class="device-status status-online">Online</span>
+                    </div>
+                    <div class="device-metrics">
+                        <div class="metric">
+                            <div class="metric-value">847L</div>
+                            <div class="metric-label">Volume Air</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">68%</div>
+                            <div class="metric-label">Kapasitas</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="device-card">
+                    <div class="device-header">
+                        <span class="device-name">🌧️ Sensor Curah Hujan</span>
+                        <span class="device-status status-online">Online</span>
+                    </div>
+                    <div class="device-metrics">
+                        <div class="metric">
+                            <div class="metric-value">12mm</div>
+                            <div class="metric-label">Curah Hujan</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">3.2L/h</div>
+                            <div class="metric-label">Laju Koleksi</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="device-card">
+                    <div class="device-header">
+                        <span class="device-name">🔧 Pompa Distribusi</span>
+                        <span class="device-status status-online">Online</span>
+                    </div>
+                    <div class="device-metrics">
+                        <div class="metric">
+                            <div class="metric-value">45L/m</div>
+                            <div class="metric-label">Debit Air</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">Aktif</div>
+                            <div class="metric-label">Status</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="device-card">
+                    <div class="device-header">
+                        <span class="device-name">⚡ Sistem Filter</span>
+                        <span class="device-status status-offline">Maintenance</span>
+                    </div>
+                    <div class="device-metrics">
+                        <div class="metric">
+                            <div class="metric-value">92%</div>
+                            <div class="metric-label">Efisiensi</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">8.5</div>
+                            <div class="metric-label">pH Level</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert-panel">
+                <h3 class="chart-title">🚨 Notifikasi & Alert</h3>
+                <div class="alert-item alert-warning">
+                    <span class="alert-icon">⚠️</span>
+                    <div>
+                        <strong>Peringatan:</strong> Tangki utama mencapai 90% kapasitas. Pertimbangkan untuk mengaktifkan distribusi.
+                        <br><small>2 jam yang lalu</small>
+                    </div>
+                </div>
+                <div class="alert-item alert-info">
+                    <span class="alert-icon">ℹ️</span>
+                    <div>
+                        <strong>Info:</strong> Curah hujan diprediksi meningkat dalam 6 jam ke depan. Siapkan kapasitas tambahan.
+                        <br><small>4 jam yang lalu</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
